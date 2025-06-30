@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from dask.distributed import Client
 from tqdm import tqdm, trange
-from asyncio.exceptions import CancelledError
 
 from ribs.archives import CVTArchive
 from ribs.emitters import EvolutionStrategyEmitter
@@ -26,7 +25,7 @@ QD_OFFSET = -600
 NUM_VIDEOS = 20
 
 GRAVITY = -10.0
-WIND = True
+WIND = False
 WIND_POWER = 20.0
 TURBULENCE = 1.5
 
@@ -39,7 +38,6 @@ def main():
     workers =min(WORKERS, os.cpu_count() - 1)
     # enable parallel processing
     client = Client(n_workers=workers, threads_per_worker=1)
-    client.wait_for_workers(workers)
     # set up env
     reference_env = gym.make("LunarLander-v3")
     # get action space dimensions
