@@ -46,7 +46,7 @@ def simulate(solution, seed=None, env=None, video_dir=None, episode_id=0):
         leg0_touch = obs[6]
         leg1_touch = obs[7]
         all_y_vels.append(y_vel)
-        all_x_vels.append(abs(x_vel))
+        all_x_vels.append(x_vel)
 
         #  if lunar makes contact w the ground for the first time, update impact values
         if not impact_x_pos and (leg0_touch or leg1_touch):
@@ -58,7 +58,7 @@ def simulate(solution, seed=None, env=None, video_dir=None, episode_id=0):
     if impact_x_pos is None:
         impact_x_pos = x_pos
         impact_y_vel = min(all_y_vels)
-        impact_x_vel = max(all_x_vels)
+        impact_x_vel = max(all_x_vels, key=abs)
 
     env.close()
 
