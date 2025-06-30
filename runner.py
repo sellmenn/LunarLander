@@ -97,7 +97,7 @@ def main():
 
     plt.figure(figsize=(8, 6))
     cvt_archive_3d_plot(archive, vmin=-300, vmax=300, cell_alpha=0.1)
-    plt.ylabel("Impact x-speed")
+    plt.ylabel("Impact x-velocity")
     plt.xlabel("Impact y-velocity")
 
     occupied = list(archive.data("index"))
