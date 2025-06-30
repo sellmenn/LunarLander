@@ -122,7 +122,7 @@ def main():
     print(f"  - Recording best elite")
     simulate(best_solution, seed=ENV_SEED, env=env, video_dir=video_dir, episode_id="best")
 
-    plt.title("Grid Archive")
+    plt.title("CVT Archive")
     plt.savefig("archive")
 
 
