@@ -14,9 +14,9 @@ This project applies **Quality Diversity (QD)** optimization to the [LunarLander
 - **CVT Archive**: Stores elite solutions in centroids defined by descriptors.
 - **Emitters**: Use Evolution Strategies to generate new policies.
 - **Measures**: Capture behavioral diversity:
-  - `impact_y_velocity`
-  - `impact_x_speed`
-  - `impact_x_velocity`
+  - `impact_y_velocity` (x-axis)
+  - `impact_x_speed` (y-axis)
+  - `impact_x_position` (z-axis)
 - **Objective**: Total reward from landing.
 
 ---
