@@ -8,6 +8,9 @@ This project applies **Quality Diversity (QD)** optimization to the [LunarLander
 ## Demo 2
 ![Elite Landing Demo](./sample2.gif)
 
+## Sample CVT Archive
+![Elite Landing Demo](./archive.png)
+
 - **CVT Archive**: Stores elite solutions in centroids defined by descriptors.
 - **Emitters**: Use Evolution Strategies to generate new policies.
 - **Measures**: Capture behavioral diversity:
