@@ -53,7 +53,7 @@ def main():
     archive = CVTArchive(
         solution_dim=solution.size,
         cells=CELLS,
-        ranges=[(-3.0, 0.0), (0, 1.0), (-1.0, 1.0),],
+        ranges=[(-3.0, 0.0), (-1.0, 1.0), (-1.0, 1.0),],
         qd_score_offset=QD_OFFSET
     )
 
