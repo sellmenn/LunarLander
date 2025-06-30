@@ -17,7 +17,7 @@ from simulate import simulate
 EPOCHS = 1000
 WORKERS = 10
 EMITTERS = 5
-ENV_SEED = 87
+ENV_SEED = 321
 
 CELLS = 500
 QD_OFFSET = -600
@@ -25,7 +25,7 @@ QD_OFFSET = -600
 NUM_VIDEOS = 20
 
 GRAVITY = -10.0
-WIND = False
+WIND = True
 WIND_POWER = 20.0
 TURBULENCE = 1.5
 
