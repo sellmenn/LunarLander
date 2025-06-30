@@ -18,7 +18,7 @@ from simulate import simulate
 EPOCHS = 1000
 WORKERS = 10
 EMITTERS = 5
-ENV_SEED = 321
+ENV_SEED = 87
 
 CELLS = 500
 QD_OFFSET = -600
