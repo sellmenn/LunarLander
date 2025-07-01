@@ -13,6 +13,7 @@ from ribs.schedulers import Scheduler
 from ribs.visualize import cvt_archive_3d_plot
 
 from simulate import simulate
+from policy import *
 
 EPOCHS = 1000
 WORKERS = 10
@@ -45,7 +46,8 @@ def main():
     # get observation space dimensions
     obs_dim = reference_env.observation_space.shape[0]
     # initialise reference solution
-    solution = np.zeros((action_dim, obs_dim))
+    dummy_policy = PolicyNetwork(obs_dim, action_dim)
+    solution = get_parameters(dummy_policy)
 
     # create archive
     archive = CVTArchive(
