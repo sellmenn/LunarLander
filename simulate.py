@@ -43,8 +43,9 @@ def simulate(solution, seed=None, env=None, video_dir=None, episode_id=0):
     while not done:
         # obtain best action for current state (observation)
         obs_tensor = torch.tensor(obs, dtype=torch.float32).to(device)
-        action_scores = policy(obs_tensor)
-        action = torch.argmax(action_scores).item()
+        with torch.no_grad():
+            action_scores = policy(obs_tensor)
+            action = torch.argmax(action_scores).item()
         # evaluate action
         obs, reward, terminated, truncated, _ = env.step(action)
         # update values
@@ -73,3 +74,6 @@ def simulate(solution, seed=None, env=None, video_dir=None, episode_id=0):
     env.close()
 
     return total_reward, impact_y_vel, impact_x_pos, impact_x_vel
+
+def simulate_batch(solutions):
+    return [simulate(s) for s in solutions]

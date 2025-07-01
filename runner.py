@@ -3,7 +3,6 @@ import time
 
 import gymnasium as gym
 import matplotlib.pyplot as plt
-import numpy as np
 from dask.distributed import Client
 from tqdm import tqdm, trange
 
@@ -12,7 +11,7 @@ from ribs.emitters import EvolutionStrategyEmitter
 from ribs.schedulers import Scheduler
 from ribs.visualize import cvt_archive_3d_plot
 
-from simulate import simulate
+from simulate import simulate, simulate_batch
 from policy import *
 
 EPOCHS = 1000
@@ -79,12 +78,14 @@ def main():
         # generate solutions
         solutions = scheduler.ask()
         # evaluate solutions
-        futures = client.map(simulate_wrapper, solutions)
+        batched_solutions = [solutions[i:i+5] for i in range(0, len(solutions), 5)]
+        futures = client.map(simulate_batch, batched_solutions)
         results = client.gather(futures)
         objectives, measures = [], []
-        for obj, impact_y_vel, impact_x_pos, impact_x_vel in results:
-            objectives.append(obj)
-            measures.append([impact_y_vel, impact_x_pos, impact_x_vel])
+        for batch in results:
+            for obj, impact_y_vel, impact_x_pos, impact_x_vel in batch:
+                objectives.append(obj)
+                measures.append([impact_y_vel, impact_x_pos, impact_x_vel])
         # update/insert solutions in archive
         scheduler.tell(objectives, measures)
         if e % 25 == 0 or e == EPOCHS:
