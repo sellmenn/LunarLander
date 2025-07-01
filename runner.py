@@ -4,6 +4,7 @@ import time
 import gymnasium as gym
 import matplotlib.pyplot as plt
 import numpy as np
+import warnings
 from dask.distributed import Client
 from tqdm import tqdm, trange
 
@@ -13,6 +14,8 @@ from ribs.schedulers import Scheduler
 from ribs.visualize import cvt_archive_3d_plot
 
 from simulate import simulate
+
+warnings.filterwarnings("ignore", message=".*Overwriting existing videos.*")
 
 EPOCHS = 1000
 WORKERS = 10
@@ -92,36 +95,21 @@ def main():
             tqdm.write(f"  - QD Score: {archive.stats.qd_score}")
             tqdm.write(f"  - Max Obj: {archive.stats.obj_max}")
             tqdm.write(f"  - Mean Obj: {archive.stats.obj_mean}")
+        # Record elites
+        if e % 100 == 0 and archive.stats.num_elites > 0:
+            os.makedirs(video_dir, exist_ok=True)
+            # Record random elite
+            random_elite = archive.sample_elites(1)
+            simulate(random_elite["solution"], seed=ENV_SEED, video_dir=video_dir, episode_id=f"epoch{e}_random")
+            
+    # Record best elite
+    best_elite = archive.best_elite
+    simulate(best_elite["solution"], seed=ENV_SEED, video_dir=video_dir, episode_id=f"best")
 
     plt.figure(figsize=(8, 6))
-    cvt_archive_3d_plot(archive, vmin=-300, vmax=300, cell_alpha=0.1)
+    cvt_archive_3d_plot(archive, vmin=-300, vmax=300, cell_alpha=0.2)
     plt.ylabel("Impact x-velocity")
     plt.xlabel("Impact y-velocity")
-
-    occupied = list(archive.data("index"))
-    if len(occupied) == 0:
-        print("No elites in archive yet — can't save videos.")
-        return
-    
-    # Sample solutions to be recorded
-    elites = archive.sample_elites(NUM_VIDEOS)
-    solutions = elites["solution"] 
-    best_elite = archive.best_elite
-    best_solution = best_elite["solution"]
-    
-    os.makedirs(video_dir, exist_ok=True)
-
-    num_videos = NUM_VIDEOS
-
-    # Record random samples
-    print(f"\nSaving {num_videos} elite videos to {video_dir}/")
-    for i in range(1, num_videos + 1):
-        print(f"  - Recording elite {i}")
-        simulate(solutions[i-1], seed=ENV_SEED, env=env, video_dir=video_dir, episode_id=f"random_{i}")
-    # Record best performing elite
-    print(f"  - Recording best elite")
-    simulate(best_solution, seed=ENV_SEED, env=env, video_dir=video_dir, episode_id="best")
-
     plt.title("CVT Archive")
     plt.savefig("archive")
 
